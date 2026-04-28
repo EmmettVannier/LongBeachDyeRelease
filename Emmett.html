@@ -22,7 +22,62 @@ ul.task-list li input[type="checkbox"] {
 }
 </style>
 
-
+/* ── Hamburger Nav ── */
+.site-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: rgba(8,18,34,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(74,158,187,0.18);
+  font-family: 'IBM Plex Mono', monospace;
+}
+.nav-logo {
+  font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: #c4a882; text-decoration: none;
+}
+.hamburger-btn {
+  background: none; border: 1px solid rgba(74,158,187,0.4);
+  border-radius: 4px; padding: 7px 10px; cursor: pointer;
+  display: flex; flex-direction: column; gap: 5px; transition: border-color 0.2s;
+}
+.hamburger-btn:hover { border-color: rgba(196,168,130,0.7); }
+.hamburger-btn span {
+  display: block; width: 22px; height: 2px;
+  background: #e8dcc8; border-radius: 2px; transition: all 0.25s ease;
+}
+.hamburger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger-btn.open span:nth-child(2) { opacity: 0; }
+.hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav-dropdown {
+  position: absolute; top: calc(100% + 1px); right: 28px;
+  background: rgba(8,18,34,0.97);
+  border: 1px solid rgba(74,158,187,0.25); border-radius: 6px;
+  overflow: hidden; min-width: 280px; box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  opacity: 0; transform: translateY(-8px); pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.nav-dropdown.open { opacity: 1; transform: translateY(0); pointer-events: all; }
+.nav-dropdown a {
+  display: flex; align-items: center; gap: 14px; padding: 16px 22px;
+  color: #e8dcc8; text-decoration: none; font-size: 12px; letter-spacing: 0.08em;
+  border-bottom: 1px solid rgba(74,158,187,0.1); transition: background 0.15s, color 0.15s;
+}
+.nav-dropdown a:last-child { border-bottom: none; }
+.nav-dropdown a:hover { background: rgba(74,158,187,0.1); color: #c4a882; }
+.nav-dropdown a .nav-icon { font-size: 16px; opacity: 0.75; }
+.nav-dropdown a .nav-label { display: flex; flex-direction: column; gap: 2px; }
+.nav-dropdown a .nav-label strong {
+  font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em;
+}
+.nav-dropdown a .nav-label span { font-size: 10px; color: rgba(232,220,200,0.5); }
+.nav-dropdown a.active .nav-label strong { color: #c4a882; }
+ 
+ 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
@@ -73,13 +128,52 @@ ul.task-list li input[type="checkbox"] {
 
 <script src="site_libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
 
-
+<script>
+  const btn = document.getElementById('hamburgerBtn');
+  const dropdown = document.getElementById('navDropdown');
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    btn.classList.toggle('open');
+    dropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', function() {
+    btn.classList.remove('open');
+    dropdown.classList.remove('open');
+  });
+  dropdown.addEventListener('click', function(e) { e.stopPropagation(); });
+</script>
+ 
 
 <link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="quarto-light">
-
+ 
+<nav class="site-nav">
+  <a href="Emmett.html" class="nav-logo">Long Beach · BC</a>
+  <div style="position:relative;">
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-dropdown" id="navDropdown">
+      <a href="Emmett.html" class="active">
+        <span class="nav-icon">🌊</span>
+        <span class="nav-label">
+          <strong>Dye Release Map</strong>
+          <span>Interactive plume tracking</span>
+        </span>
+      </a>
+      <a href="report.html">
+        <span class="nav-icon">📄</span>
+        <span class="nav-label">
+          <strong>Technical Report</strong>
+          <span>Full geospatial analysis</span>
+        </span>
+      </a>
+    </div>
+  </div>
+</nav>
+  
 <div id="quarto-search-results"></div>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
